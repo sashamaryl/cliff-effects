@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React from 'react';
-import { Line, Bar } from 'react-chartjs-2';
+import { Line, Bar, HorizontalBar } from 'react-chartjs-2';
 import Chart from 'chart.js';
 
 // Logic
@@ -39,9 +39,7 @@ const ResultsGraph = (props) => {
   });
 
   // TAFDC color? "rgba(206, 125, 61, 1)"
-
-
-//in: current income, future income, current benefits snap and sec8, future benefits snap and sec8 
+// current benefits snap and sec8, future benefits snap and sec8 
 
 
 
@@ -126,26 +124,47 @@ const ResultsGraph = (props) => {
       }
     }; 
 
-  
-
 var myTimeline = {
-  type: 'Line', 
+  type: 'Line ', 
   data: {
-    datasets: [{
-      label: ['Edge Distance'],
-      data: [fakeClient.future.earned, 400, (fakeClient.future.earned + 300)]
-    }],
-    labels: ["income", "current benefit", "lose benefit"]
-  }
-},
-  options: {
-    scales: {
-      xAxes: {
-        stacked:true
+    labels: ['income'],
+    datasets: [
+      {
+        label: 'income',
+        data: [800],
+        backgroundColor: 'red'
+      },
+      {
+
+      data: [1200],
+        backgroundColor: 'green'
+      },
+      {
+        label: 'future income',
+        data: [(1000)],
+        backgroundColor: 'blue'
       }
-    },
+    ]},
+  height: '5em', 
+  options: {
+    maintainAspectRatio: false, 
+    scales: 
+    {
+      yAxes: 
+      [{
+        display: false
+      }],
+      xAxes: 
+      [{
+        type: 'category',
+        labels: ['income'], 
+        stacked:true
+      }]
     }
-  };
+  }
+};
+
+
 
   // Non-saving version for first prototype testing
   
@@ -161,7 +180,7 @@ var myTimeline = {
         right      = {{ name: 'Reset', func: function(){ document.location.reload() } }}
       >
          <div> <Bar data={myBarChart.data} options={myBarChart.options} /> </div>
-         <div> <Bar data={myTimeline.data} options={myTimeline.options} /> </div>
+         <div> <Bar data={myTimeline.data} options={myTimeline.options} /></div>
       </FormPartsContainer>
     </wrapper>
   )
