@@ -174,7 +174,8 @@ const Role = function ({ member, setMember }) {
 * 
 * @returns Component
 */
-const MemberField = function ({ household, time, setHousehold, setClientProperty }, indx ) {
+const MemberField = function ({
+    household, time, setHousehold, setClientProperty }, indx ) {
 
   var member      = household[ indx ],
       routeStart  = 'household/' + indx + '/';
@@ -207,7 +208,8 @@ const MemberField = function ({ household, time, setHousehold, setClientProperty
 
       <Columns.One>
         { indx > 0
-          ? <MemberButton className={'remove'} onClick={removeMember} iconName={'remove'} />
+            ? <MemberButton className={'remove'} onClick={removeMember} iconName=
+                {'remove'} />
           : <span>{ household.length > 1
             ? <Icon fitted name={'ban'} style={{ color: '#cfcfd0', fontSize: '2.2em', verticalAlign: 'text-top' }} />
             : null
@@ -230,7 +232,8 @@ const MemberField = function ({ household, time, setHousehold, setClientProperty
       </Columns.Three>
 
       <Columns.Four>
-        <Checkbox name={'m_disabled'} checked={member.m_disabled} onChange={onMemberChecked} />
+          <Checkbox name={'m_disabled'} checked={member.m_disabled} onChange=
+              {onMemberChecked} />
       </Columns.Four>
 
     </Form.Field>
@@ -358,7 +361,8 @@ const HouseholdStep = function ( props ) {
         clarifier = {'Information about the members of your household.'}
         left      = {{name: 'Previous', func: props.previousStep}}
         right     = {{name: 'Next', func: props.nextStep}}>
-			<HouseholdContent setClientProperty={setTimeProp} current={props.client.current} time={'current'} />
+        <HouseholdContent setClientProperty={setTimeProp} current=
+            {props.client.current} time={'current'} />
       </FormPartsContainer>
     </Form>
   );
