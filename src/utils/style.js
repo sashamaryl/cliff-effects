@@ -245,42 +245,6 @@ const columnHeaderStyle = {
   textAlign: 'center',
   borderRadius: 'inherit',
   letterSpacing: '0.02em',
-};
-
-const totalsRowStyle = {
-  borderTop: "2px solid rgba(0, 181, 173, 1)",
-  fontWeight: 700,
-  fontSize: '1.1em',
-  padingTop: '0.25em'
-};
-
-const rowHeaderStyle = {
-  fontSize: '1.1em',
-  fontWeight: 700,
-  textAlign: 'left'
- };
-
-const totalsRowHeaderStyle = {
-  fontSize: '1.2em',
-  fontWeight: 700,
-  textAlign: 'left',
-  borderTop: "2px solid rgba(0, 181, 173, 1)",
-  padingTop: '0.25em'
-  };
-const basicRow = {
-  textAlign: 'right'
-  };
-
-
-
-const columnHeaderStyle = {
-  background: 'rgba(0, 181, 173, 1)',
-  color: 'white',
-  fontSize: '1.3em',
-  fontWeight: 900,
-  textAlign: 'center',
-  borderRadius: 'inherit',
-  letterSpacing: '0.02em',
   };
 
 const totalsRowStyle = {
@@ -420,31 +384,6 @@ const IntervalColumnHeadings = {
 
 
 
-
-
-
-
-
-
-
- // ***WILL***
-// AboutContent.js *W
-// FixedMenu.js *W
-// MainMenu.js *W
-// setupTests.js *W
-// AboutPage.js *W
-// HomePage.js *W
-// current-benefits.js *W
-// currentIncome.js *W
-// Household.js *W
-// cashflow.js *W
-// getGovData.js *W
-// getTimeSetter.js *W
-// registerServiceWorker.js *W
-// setNestedProperty.js *W
-// stylesObjects.js *W
-
-
 // AboutPage and AboutContent
 const aboutPage = {
     fontSize: '4em',
@@ -467,7 +406,7 @@ const homePageSubtitle = {
     marginTop: '-15px',
     marginRight: '45px',
 };
-const centerContents = {
+const centerContentsMargin = {
     marginTop: '3em',
     marginBottom: '3em',
 };
