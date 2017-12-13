@@ -1,5 +1,5 @@
 // DATA
-import { UNDER13_CARE_EXPENSES, OVER12_CARE_EXPENSES } from '../../data/state/massachusetts/name-cores';
+import { UNDER13_CARE_EXPENSES, OVER12_CARE_EXPENSES } from '../../data/massachusetts/name-cores';
 import { SNAPData } from '../../data/federal/2017/SNAPData';
 import { federalPovertyGuidelines } from '../../data/federal/federalPovertyGuidelines';
 
@@ -323,6 +323,5 @@ const householdSize = function ( client ) {
 
 // Bay State CAP not included as this prototype only deals with
 // changes in earned income
-
 
 export { getSNAPBenefits };
