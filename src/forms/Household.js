@@ -23,19 +23,20 @@ import { isPositiveWholeNumber } from '../utils/validators';
 // OBJECT MANIPULATION
 import { cloneDeep } from 'lodash';
 
+// Styling
+import {
+    columnStyle,
+    ageColStyle,
+    roleColStyle,
+    disabledColStyle,
+    memberButtonStyle,
+    roleInfoStyle,
+    addButtonStyle
+} from '../utils/style';
 
 // ======================
 // GENERICS
 // ======================
-// To be able to adjust sizes easily
-// Very specific to household size. May be worth creating
-// a constructor for columns in general, or maybe use a Grid.
-const columnStyle = {
-  display: 'inline-block',
-  textAlign: 'center',
-  marginTop: '0.7em',
-  // marginBottom: '0.7em'
-};
 
 const Columns = {};
 
@@ -43,25 +44,25 @@ const Columns = {};
 Columns.One = function ({ noMargin, children }) {
   var marginTop = columnStyle.marginTop;
   if ( noMargin ) { marginTop = 0; }
-  return ( <div style={{...columnStyle, marginTop: marginTop, width: '5em'}}> {children} </div> );
+  return (<div style={{...columnStyle, ...ageColStyle}}>{children}</div>);
 }
 
 Columns.Two = function ({ noMargin, children }) {
   var marginTop = columnStyle.marginTop;
   if ( noMargin ) { marginTop = 0; }
-  return ( <div style={{...columnStyle, marginTop: marginTop, width: '20em', textAlign: 'left', paddingLeft: '1em'}}> {children} </div> );
+  return (<div style={{...columnStyle, ...roleColStyle}}>{children}</div>);
 }
 
 Columns.Three = function ({ noMargin, children }) {
   var marginTop = columnStyle.marginTop;
   if ( noMargin ) { marginTop = 0; }
-  return ( <div style={{...columnStyle, marginTop: marginTop, width: '5em'}}> {children} </div> );
+  return (<div style={{...columnStyle, ...ageColStyle}}>{children}</div>);
 }
 
 Columns.Four = function ({ noMargin, children }) {
   var marginTop = columnStyle.marginTop;
   if ( noMargin ) { marginTop = 0; }
-  return ( <div style={{...columnStyle, marginTop: marginTop, width: '10em'}}> {children} </div> );
+  return (<div style={{...columnStyle, ...disabledColStyle}}>{children}</div>);
 }
 
 
@@ -87,7 +88,7 @@ const ColumnHeader = function ({ children, columnNum }) {
 
 };
 
-
+//
 /** @todo description
 * 
 * @function
@@ -96,6 +97,7 @@ const ColumnHeader = function ({ children, columnNum }) {
 * 
 * @returns Component
 */
+
 const MemberButton = function ({ basic, color, iconName, className, onClick }) {
 
   color = color || null;
@@ -107,12 +109,10 @@ const MemberButton = function ({ basic, color, iconName, className, onClick }) {
       icon={iconName}
       className={className}
       onClick={onClick}
-      style={{ padding: '0', height: '2.2em', width: '2.2em' }}
+      style={ memberButtonStyle }
       circular />
   );
-
 };
-
 
 // ======================
 // UNIQUE
@@ -156,9 +156,8 @@ const Role = function ({ member, setMember }) {
 
   }
 
-  // Styles will have to be adjusted.
   return (
-    <div style={{ display: 'inline-block', width: '100%', textAlign: 'left', marginLeft: margin }}>
+    <div style={{...roleInfoStyle, marginLeft: margin}}>
       { ThisRole }
     </div>
   );
@@ -174,7 +173,8 @@ const Role = function ({ member, setMember }) {
 * 
 * @returns Component
 */
-const MemberField = function ({ household, time, setHousehold, setClientProperty }, indx ) {
+const MemberField = function ({
+    household, time, setHousehold, setClientProperty }, indx ) {
 
   var member      = household[ indx ],
       routeStart  = 'household/' + indx + '/';
@@ -200,16 +200,16 @@ const MemberField = function ({ household, time, setHousehold, setClientProperty
     setHousehold( evnt, household );
   };  // End removeMember()
 
-
   // The font size thing is a bit weird, but... later
   return (
     <Form.Field className='flex-item' key={indx}>
 
       <Columns.One>
         { indx > 0
-          ? <MemberButton className={'remove'} onClick={removeMember} iconName={'remove'} />
+            ? <MemberButton className={'remove'} onClick={removeMember} iconName=
+                {'remove'} />
           : <span>{ household.length > 1
-            ? <Icon fitted name={'ban'} style={{ color: '#cfcfd0', fontSize: '2.2em', verticalAlign: 'text-top' }} />
+            ? <Icon fitted name={'ban'} style={ addButtonStyle } />
             : null
           }</span>
         }
@@ -230,7 +230,8 @@ const MemberField = function ({ household, time, setHousehold, setClientProperty
       </Columns.Three>
 
       <Columns.Four>
-        <Checkbox name={'m_disabled'} checked={member.m_disabled} onChange={onMemberChecked} />
+          <Checkbox name={'m_disabled'} checked={member.m_disabled} onChange=
+              {onMemberChecked} />
       </Columns.Four>
 
     </Form.Field>
@@ -358,7 +359,8 @@ const HouseholdStep = function ( props ) {
         clarifier = {'Information about the members of your household.'}
         left      = {{name: 'Previous', func: props.previousStep}}
         right     = {{name: 'Next', func: props.nextStep}}>
-			<HouseholdContent setClientProperty={setTimeProp} current={props.client.current} time={'current'} />
+        <HouseholdContent setClientProperty={setTimeProp} current=
+            {props.client.current} time={'current'} />
       </FormPartsContainer>
     </Form>
   );
