@@ -10,7 +10,7 @@ import {
 
 // BENEFIT LOGIC
 import { getSNAPBenefits } from '../programs/federal/snap';
-import { getHousingBenefit } from '../programs/state/massachusetts/housing';
+import { getHousingBenefit } from '../programs/massachusetts/housing';
 
 // OBJECT MANIPULATION
 import { cloneDeep } from 'lodash';
@@ -25,20 +25,18 @@ const getSignSymbol = function ( num ) {
 
 const BenefitsTable = function ( props ) {
 
-  var currentClient = cloneDeep( props.client ),
+  var client        = props.client,
+      currentClient = cloneDeep( client ),
       futureClient  = cloneDeep( currentClient );
   // Hack because everything's using future value instead
   // of just using current value.
   currentClient.future.earned = currentClient.current.earned;
 
-
-
-
-  var SNAPBenefitCurrent  = Math.round( getSNAPBenefits( currentClient ).benefitValue * 12 ),
-      SNAPBenefitFuture   = Math.round( getSNAPBenefits( futureClient ).benefitValue * 12 ),
+  var SNAPBenefitCurrent  = client.current.hasSnap ? Math.round( getSNAPBenefits( client, 'current' ) * 12 ) : 0,
+      SNAPBenefitFuture   = client.current.hasSnap ? Math.round( getSNAPBenefits( client, 'future' ) * 12 ) : 0,
       SNAPDiff            = SNAPBenefitFuture - SNAPBenefitCurrent,
-      sec8BenefitCurrent  = Math.round( getHousingBenefit( currentClient ).benefitValue * 12 ),
-      sec8BenefitFuture   = Math.round( getHousingBenefit( futureClient ).benefitValue * 12 ),
+      sec8BenefitCurrent  = client.current.hasHousing ? Math.round( getHousingBenefit( client ) * 12 ) : 0,
+      sec8BenefitFuture   = client.current.hasHousing ? Math.round( getHousingBenefit( client ) * 12 ) : 0,
       sec8Diff            = sec8BenefitFuture - sec8BenefitCurrent,
       totalBenefitCurrent = SNAPBenefitCurrent + sec8BenefitCurrent,
       totalBenefitFuture  = SNAPBenefitFuture + sec8BenefitFuture,
@@ -49,7 +47,6 @@ const BenefitsTable = function ( props ) {
       netCurrent          = totalBenefitCurrent + incomeCurrent,
       netFuture           = totalBenefitFuture + incomeFuture,
       netDiff             = totalDiff + incomeDiff;
-
 
 const   columnHeaderStyle = {
                             background: 'rgba(0, 181, 173, 1)',
@@ -143,7 +140,6 @@ const TotalsRow = function ( props ) {
       </Table.Row>
     )
   };
-
 
   return (
     <wrapper>

@@ -4,12 +4,15 @@ import {
   Segment,
 } from 'semantic-ui-react';
 
-import { AboutContent } from '../AboutContent';
+import { AboutContent } from '../components/AboutContent';
+
+import { aboutPage } from '../utils/style';
 
 const AboutPage = () => {
+    const padding = aboutPage.padding;
   return (
     <div>
-      <Segment style={{ padding: '8em 0em' }} vertical>
+      <Segment style={{ padding }} vertical>
         <Grid container stackable verticalAlign='middle'>
           <Grid.Row>
             <Grid.Column width={10}>

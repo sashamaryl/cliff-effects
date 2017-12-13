@@ -3,11 +3,11 @@ import React from 'react';
 import { Line } from 'react-chartjs-2';
 
 // Logic
-import { getSNAPBenefits } from './programs/federal/snap';
-import { getHousingBenefit } from './programs/state/massachusetts/housing';
+import { getSNAPBenefits } from '../programs/federal/snap';
+import { getHousingBenefit } from '../programs/massachusetts/housing';
 
 // Our Components
-import { FormPartsContainer } from './forms/formHelpers';
+import { FormPartsContainer } from './formHelpers';
 
 const ResultsGraph = (props) => {
   var xRange = _.range(0, 100000, 1000);
@@ -16,25 +16,25 @@ const ResultsGraph = (props) => {
 
   var snapData = xRange.map(annualIncome => {
       fakeClient.future.earned = annualIncome/12;
-      return getSNAPBenefits(fakeClient).benefitValue * 12});
+      return getSNAPBenefits(fakeClient, 'future') * 12});
 
   /** Section-8 Housing Choice Voucher */
   /** @todo Base this rent on FMR areas and client area of residence if no rent available. */
-  fakeClient.current.contractRent = 700;
+  fakeClient.current.contractRent = fakeClient.current.contractRent || 700;
   fakeClient.current.earned = 0;
   var housingData = xRange.map(function ( annualIncome ) {
     // New renting data
     fakeClient.future.earned = annualIncome/12;
 
-    var result  = getHousingBenefit( fakeClient ),
-        subsidy = result.benefitValue * 12;
+    var monthlySubsidy  = getHousingBenefit( fakeClient, 'future' ),
+        yearlySubsidy   = monthlySubsidy * 12;
 
     // Prep for next loop
-    var newShare = result.data.newRentShare
+    var newShare = fakeClient.current.contractRent - monthlySubsidy;
     fakeClient.current.rentShare  = newShare;
     fakeClient.current.earned     = annualIncome/12;
 
-    return subsidy;
+    return yearlySubsidy;
   });
 
   // TAFDC color? "rgba(206, 125, 61, 1)"
@@ -145,7 +145,7 @@ const ResultsGraph = (props) => {
       <FormPartsContainer
         title     = {'Results'}
         left      = {{ name: 'Go Back', func: props.previousStep }}
-        right      = {{ name: 'Reset', func: function(){ document.location.reload() } }}
+        right      = {{ name: 'Reset', func: reloadPage }}
       >
          <div> <Line data={data} options={options} /> </div>
       </FormPartsContainer>
@@ -153,5 +153,13 @@ const ResultsGraph = (props) => {
   )
 
 };  // End Results()
+
+const reloadConfirmationMessage = 'This action will erase all current data. Are you sure you want to do this?';
+function reloadPage() {
+  if (window.confirm(reloadConfirmationMessage)) {
+    window.onbeforeunload = null;
+    window.location.reload();
+  }
+}
 
 export default ResultsGraph

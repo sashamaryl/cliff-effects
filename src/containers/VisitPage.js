@@ -18,13 +18,14 @@ import { CLIENT_DEFAULTS } from '../utils/CLIENT_DEFAULTS';
 
 // Our Components
 // import AlertSidebar from '../AlertSidebar'
-import { CurrentIncomeStep } from '../forms/currentIncome';
-import { CurrentExpensesStep } from '../forms/currentExpenses';
+import ConfirmLeave from '../components/ConfirmLeave'
+import { CurrentIncomeStep } from '../forms/CurrentIncome';
+import { CurrentExpensesStep } from '../forms/CurrentExpenses';
 import { PredictionsStep } from '../forms/Predictions';
 import { HouseholdStep } from '../forms/Household';
-import { CurrentBenefitsStep } from '../forms/current-benefits';
+import { CurrentBenefitsStep } from '../forms/CurrentBenefits';
 import StepBar from '../components/StepBar';
-import ResultsGraph from '../ResultsGraph';
+import ResultsGraph from '../forms/ResultsGraph';
 
 class VisitPage extends Component {
   constructor(props) {
@@ -40,11 +41,7 @@ class VisitPage extends Component {
         currentStep: 1,
         isBlocking: true,
         redirect: false,
-        client : {
-          ...CLIENT_DEFAULTS,
-          snapAlert: 'good',
-          housingAlert: 'good',
-        },
+        client : { ...CLIENT_DEFAULTS },
         userChanged: {}
     };  // end this.state {}
 
@@ -57,9 +54,6 @@ class VisitPage extends Component {
       { title: 'Results', form: ResultsGraph }
     ];  // end this.steps {}
   };  // End constructor()
-
-
-
 
   changeClient = (evnt, { route, name, value, checked, time }) => {
 
@@ -124,12 +118,15 @@ class VisitPage extends Component {
   };  // End getCurrentStep()
 
   render() {
-
     return (
       <div className='forms-container flex-item flex-column'>
+        <ConfirmLeave
+          when={this.state.isBlocking}
+          message='This action will erase all current data. Are you sure you want to do this?'
+        />
         <Prompt
           when={this.state.isBlocking}
-          message='Are you sure you want to leave the page with unsaved changes?'
+          message='This action will erase all current data. Are you sure you want to do this?'
         />
 
         {this.state.redirect ?

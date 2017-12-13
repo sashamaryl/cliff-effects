@@ -1,21 +1,19 @@
 
 // DATA
-import { CHILD_CARE_EXPENSES } from '../../../data/state/massachusetts/name-cores';
+import { UNDER13_CARE_EXPENSES } from '../../data/massachusetts/name-cores';
 
 // UTILITIES
-import { sum } from '../../../utils/math';
-import { Result } from '../../../utils/Result';
+import { sum } from '../../utils/math';
 import {
-  toCashflow,
-  sumCashflow,
+  sumProps,
   getGrossUnearnedIncomeMonthly
-} from '../../../utils/cashflow';
+} from '../../utils/cashflow';
 import {
   getEveryMemberOfHousehold,
   isHeadOrSpouse,
   getDependentsOfHousehold,
   isDisabled
-} from '../../../utils/getMembers';
+} from '../../utils/getMembers';
 
 
 /**
@@ -28,8 +26,14 @@ import {
 * just be assumed to be 0 so that no errors will occur).
 */
 
-/** Using old and new cash flow data, return new subsidy amount,
-* include new rent share.
+/** Can only be useful in predicting future subisdy amounts.
+* 
+* Uses old and new cash flow data, return new subsidy amount,
+*     include new rent share.
+*
+* var diff = new min ttp - old min ttp;
+* var new rent share = old rent share + diff;
+* var new subsidy = contract rent - new rent share
 * 
 * @function
 * @since 09/2017
@@ -42,41 +46,24 @@ import {
 * @todo Find out how close to 0/change the benefit amount needs to be in
 * order for the client to be warned.
 */
-const getHousingBenefit = function ( client ) {
-  /** @todo if time 'current', return contractRent - rentShare */
-
-  /*
-  * var diff = new min ttp - old min ttp;
-  * var new rent share = old rent share + diff;
-  * var new subsidy = contract rent - new rent share
-  */
-  var curr = 'current';
+const getHousingBenefit = function ( client, timeframe ) {
+  /** @todo Just return number values */
+  
+  // Current subsidy MUST already be known in every case
+  if ( timeframe === 'current' ) {
+    return client.current.contractRent - client.current.rentShare;
+  }
 
   var ttps        = getTTPs( client ),
       diff        = ttps.newTTP - ttps.oldTTP,
-      newShare    = diff + toCashflow( client, curr, 'rentShare' ),
-      contrRent   = toCashflow( client, curr, 'contractRent' );
+      newShare    = diff + client.current.rentShare,
+      contrRent   = client.current.contractRent;
 
   // Don't pay more rent than the landlord is asking for
   var maxShare    = Math.min( contrRent, newShare ),
       newSubsidy  = contrRent - maxShare;
 
-  var result = {
-    result: 'good',
-    details: 'All good!',
-    benefitValue: newSubsidy,
-    data: { newRentShare: maxShare }
-  };
-
-  /** @todo When to give a warning for Section 8? */
-  if ( newSubsidy <= 500 ) {
-    result.result   = 'information';
-    result.details  = 'Your housing subsidy is getting low.';
-  }
-
-  var officialResult = new Result( result );
-
-  return officialResult;
+  return newSubsidy;
 };  // End getHousingBenefit
 
 
@@ -130,10 +117,10 @@ const getTTPs = function ( client ) {
 * @todo Function description
 */
 const getNetIncome = function ( client, timeframe ) {
-  var unearned = getGrossUnearnedIncomeMonthly( client, timeframe ),
-      gross    = unearned + toCashflow( client, timeframe, 'earned' ),
-      net      = gross - toCashflow( client, timeframe, 'incomeExclusions' );
-  return net;
+  var unearned = getGrossUnearnedIncomeMonthly( client[ timeframe ] ),
+      gross    = unearned + client[ timeframe ].earned;
+  // net = gross - incomeExclusions, but income exclusions not accounted for for MVP
+  return gross;
 };  // End getNetIncome()
 
 
@@ -151,23 +138,23 @@ const getNetIncome = function ( client, timeframe ) {
 */
 const getAdjustedIncome = function ( client, timeframe, net ) {
 
-  var time       = timeframe,
+  var time       = timeframe,  // shorter
       allowances = [];
 
   // #4 & #5
-  var depAllowanceAnnual = getDependentsOfHousehold( client, timeframe ).length * 480;
+  var depAllowanceAnnual = getDependentsOfHousehold( client[ time ] ).length * 480;
   allowances.push( depAllowanceAnnual/12 );
   // #6
-  var childcare   = sumCashflow( client, time, CHILD_CARE_EXPENSES ),
-      ccIncome    = toCashflow( client, time, 'earnedBecauseOfChildCare' ),
+  var childcare   = sumProps( client[ time ], UNDER13_CARE_EXPENSES ),
+      ccIncome    = client[ time ].earnedBecauseOfChildCare,
       /** @todo If student or looking for work, during those hours the expense isn't limited? 2007 Ch. 5 doc */
       ccMin       = Math.min( childcare, ccIncome );
   allowances.push( ccMin );
   // #7 - 13
-  var disAndMed = getDisabledAndMedicalAllowancesSum( client, timeframe, net )
+  var disAndMed = getDisabledAndMedicalAllowancesSum( client, time, net )
   allowances.push( disAndMed );
   // #14 (yes, they mean head or spouse here)
-  if ( hasDsbOrEldHeadOrSpouse( client, timeframe ) ) { allowances.push( 400/12 ); }
+  if ( hasDsbOrEldHeadOrSpouse( client, time ) ) { allowances.push( 400/12 ); }
 
   var total = sum( allowances ),
       adj   = net - total;
@@ -184,29 +171,29 @@ const getAdjustedIncome = function ( client, timeframe, net ) {
 */
 const getDisabledAndMedicalAllowancesSum = function ( client, timeframe, net ) {
 
-  var time          = timeframe,
+  var time          = timeframe,  // shorter
       netSubtractor = net * 0.03;  // #8, #13
 
   // ----- Assistance Allowance #C, #7 - 11 ----- \\
-  if ( !hasAnyDsbOrElderly( client, timeframe ) ) { return 0; }
+  if ( !hasAnyDsbOrElderly( client, time ) ) { return 0; }
 
   // pg 5-30 to 5-31
-  var handcpExpense  = toCashflow( client, time, 'disabledAssistance' ),  // #7
+  var handcpExpense  = client[ time ].disabledAssistance,  // #7
       asstSubtracted = handcpExpense - netSubtractor,  // #9
-      asstIncome     = toCashflow( client, time, 'earnedBecauseOfAdultCare' ), // #10
+      asstIncome     = client[ time ].earnedBecauseOfAdultCare, // #10
       hcapAllowance  = Math.min( asstSubtracted, asstIncome ),  // #11
       hcapMin        = Math.max( 0, hcapAllowance );  // Don't get negative
 
   // ----- Maybe Stop #D ----- \\
   /** Only keep going if there's a disabled/elderly head or spouse (or sole member) */
-  if ( !hasDsbOrEldHeadOrSpouse( client, timeframe ) ) { return hcapMin; }
+  if ( !hasDsbOrEldHeadOrSpouse( client, time ) ) { return hcapMin; }
 
 
   // ----- Medical Allowance #12 - 13 ----- \\
   // #12, pg 5-31 to 5-32
-  var disOrElderlyMedical = toCashflow( client, time, 'disabledMedical' ),
+  var disOrElderlyMedical = client[ time ].disabledMedical,
       // pg 5-31 says all medical expenses count for this household
-      otherMedical        = toCashflow( client, time, 'otherMedical' ),
+      otherMedical        = client[ time ].otherMedical,
       medicalExpenses     = disOrElderlyMedical + otherMedical;  // #12
 
   // Read all of pg 5-32 and 5-34 for the following conditional.
@@ -245,7 +232,7 @@ const isDisabledOrElderly = function ( member ) {
 
 // Sure, we could combine these last two, but is it worth it?
 const hasAnyDsbOrElderly = function ( client, timeframe ) {
-  var numMatches = getEveryMemberOfHousehold( client, timeframe, isDisabledOrElderly ).length;
+  var numMatches = getEveryMemberOfHousehold( client[ timeframe ], isDisabledOrElderly ).length;
   return numMatches > 0;
 };  // End hasAnyDsbOrElderly()
 
@@ -255,7 +242,7 @@ const hasDsbOrEldHeadOrSpouse = function ( client, timeframe ) {
   var comboTest = function ( member ) {
     return isDisabledOrElderly( member ) && isHeadOrSpouse( member );
   };
-  var numMatches = getEveryMemberOfHousehold( client, timeframe, comboTest ).length;
+  var numMatches = getEveryMemberOfHousehold( client[ timeframe ], comboTest ).length;
 
   return numMatches > 0;
 
