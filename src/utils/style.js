@@ -11,90 +11,103 @@
 //    index.css    //
 
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
+//body
+const body = {
+  margin: 0,
+  padding: 0, 
+  fontFamily: 'sans-serif'
+};
+
+//form .field-aligner
+const form = {
+  fieldAligner: {
+    display: 'inline-block', 
+    textAlign: 'left'
+  }
+};
+
+
+//#App
+const App = {
+  minHeight: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between'
+};
+
+//#root
+const root = {
+  height: '100%'
+};
+
+//#HashRouter
+const HashRouter = {
+  flex: '1 0', 
+  display: 'flex', 
+  flexDirection: 'column'
+};
+
+//#HomePage
+const HomePage = {
+  backgroundImage: 'url(./images/splash.svg)',
+  backgroundSize: 'cover', 
+  flex: '1 0', 
+  display: 'flex', 
+  flexDirection: 'column', 
+  justifyContent: 'center',
+  alignItems: 'center'
+}; 
+
+//.flex-column
+const flexColumn = {
+  display: 'flex', 
+  flexDirection: 'column'
 }
 
-form .field-aligner {
-  display: inline-block;
-  text-align: left;
-}
+//.flex-item
+const flexItem = {
+  flex: '1 0'
+};
 
-#App {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
 
-#root {
-  height:  100%;
-}
+//.center-contents 
+const centerContents = {
+  display: 'flex',
+  justifyContent: 'center'
+};
 
-#HashRouter {
-  flex: 1 0;
-  display: flex;
-  flex-direction: column;
-}
+//.ui.form h4.ui.header.cashflow-column,
+//.ui.form .cashflow .cashflow-column 
+const cashflowForms = {
+  display: 'inline-block',
+  marginRight: '.2em !important',
+  width: '7em',
+  textAlign: 'center'
+};
 
-#HomePage {
-  background-image: url(./images/splash.svg) !important;
-  background-size: cover !important;
-  flex: 1 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
 
-#HomeContent {
-  flex: 1 0;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-}
+//.ui.form h4.ui.header.cashflow-column:last-child,
+//.ui.form .cashflow .cashflow-column:last-child 
+const cashflowColumn = {
+  textAlign: 'left',
+  width: 'auto',
+  paddingLeft: '1em !important'
+};
+
+
+//.ui.form .cashflow .cashflow-column .ui.input input[type="number"] 
+const cashflowInput = {
+  textAlign: 'right',
+  width: '7em',
+  display: 'inline-block'
+};
+
+
 
 /*
-Used to fill vertical space.
-`height: 100%` doesn't work with Flexbox on Mobile Safari.
-*/
-.flex-column {
-  display: flex!important;
-  flex-direction: column;
-}
-.flex-item {
-  flex: 1 0;
-}
 
-.center-contents {
-  display: flex;
-  justify-content: center;
-}
+These not currently being used, just present in comments. 
 
-.ui.form h4.ui.header.cashflow-column,
-.ui.form .cashflow .cashflow-column {
-  display: inline-block;
-  margin-right: .2em !important;
-  width: 7em;
-  text-align: center;
-}
-
-.ui.form h4.ui.header.cashflow-column:last-child,
-.ui.form .cashflow .cashflow-column:last-child {
-  text-align: left;
-  width: auto;
-  padding-left: 1em !important;
-}
-
-.ui.form .cashflow .cashflow-column .ui.input input[type="number"] {
-  text-align: right;
-  width: 7em;
-  display: inline-block;
-}
-
-/* One of these two groups */
 .info-revealer .info-tooltip {
     display: none;
 }
@@ -107,29 +120,47 @@ Used to fill vertical space.
     display: none;
 }
 
+
+These are in a component, but I do not think that the component is being used. 
+
 .label-info { display: inline; }
 .label-info.hidden { display: none; }
 
+*/
 
-.massive-toggle .ui.toggle.checkbox input~label:before {
-    background-color: rgba(0, 0, 0, 0.23);
-}
-.massive-toggle .ui.toggle.checkbox input~label:after {
-    transform: scale(0.85) translate(10%, 0);
-}
-.massive-toggle .ui.toggle.checkbox input:focus~label:before {
-    background-color: rgba(0, 0, 0, 0.4);
-}
-.massive-toggle .ui.toggle.checkbox input:checked~label:after {
-    transform: scale(0.85) translate(-10%, 0);
-}
 
-#addMember {
-    padding: 0;
-    padding-top: .5rem;
-    padding-bottom: .5rem;
-    margin-top: 0.7rem;
-}
+/**The massive-toggle styles are applied, but I don't believe they are doing any work**/
+
+//.massive-toggle .ui.toggle.checkbox input~label:before 
+const toggleBefore = {
+    backgroundColor: 'rgba(0, 0, 0, 0.23)'
+};
+
+//.massive-toggle .ui.toggle.checkbox input~label:after 
+const toggleAfter = {
+    transform: 'scale(0.85) translate(10%, 0)'
+};
+
+// .massive-toggle .ui.toggle.checkbox input:focus~label:before 
+const toggleLabelBefore = {
+    backgroundColor: 'rgba(0, 0, 0, 0.4)'
+};
+
+//.massive-toggle .ui.toggle.checkbox input:checked~label:after 
+const toggleLableAfter = {
+    transform: 'scale(0.85) translate(-10%, 0)'
+};
+
+
+//#addMember
+const addMember = {
+    padding: 0,
+    paddingTop: '.5rem',
+    paddingBottom: '.5rem',
+    marginTop: '0.7rem'
+};
+
+
 
 /* Override text unselectable in semantic-ui-react */
 /* though .ui.menu .text.item > *,
@@ -138,6 +169,8 @@ Used to fill vertical space.
 are all user-select: text as is
 .ui.dimmer > .content
 */
+
+/*
 .ui.checkbox input.hidden+label,
 .ui.button,
 .ui.dimmer,
@@ -154,17 +187,20 @@ ol.ui.list li:before,
 .ui.sortable.table thead th.sorted:hover {
     user-select: all;
 }
+*/
 
 /* Remove controls from Firefox */
+/*
 input[type=number] {
   -moz-appearance: textfield;
 }
 /* Remove controls from Safari and Chrome */
+/*
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button { 
   -webkit-appearance: none;
   margin: 0; /* Removes leftover margin */
-}
+//}
 
 
 //   index.js   //
@@ -179,66 +215,145 @@ input[type=number]::-webkit-outer-spin-button {
 //   none   //
 
 
-//     VisitPage.js    ///
-
-className='flex-item flex-column' style={{ padding: '42px 0' }}
-style={{ padding: '42px 0' }}
-<div className="flex-item flex-column" style={{ padding: '14px 0' }}>
+//     VisitPage.js    //
 
 
+const flexColumnStyle = {
+  className: 'flex-item flex-column',
+  padding: '42px 0',
+  };
 
-//   BenefitsTable.js   /
+const flexColumnStyle2 = {
+  className: "flex-item flex-column",
+  padding: '14px 0'
+};
 
-
-const   columnHeaderStyle = {
-                            background: 'rgba(0, 181, 173, 1)',
-                            color: 'white',
-                            fontSize: '1.3em',
-                            fontWeight: 900,
-                            textAlign: 'center',
-                            borderRadius: 'inherit',
-                            letterSpacing: '0.02em',
-                            }
-      , totalsRowStyle    = {
-                            borderTop: "2px solid rgba(0, 181, 173, 1)",
-                            fontWeight: 700,
-                            fontSize: '1.1em',
-                            padingTop: '0.25em'
-                              }
-      , rowHeaderStyle    = {
-                    fontSize: '1.1em',
-                    fontWeight: 700,
-                    textAlign: 'left'
-                    }
-      , totalsRowHeaderStyle = {
-                    fontSize: '1.2em',
-                    fontWeight: 700,
-                    textAlign: 'left',
-                    borderTop: "2px solid rgba(0, 181, 173, 1)",
-                    padingTop: '0.25em'
+const paddingLight = {
+  padding: '42px 0'
+};
 
 
-      };
 
-      <Table.Row style={{border: 'none'}}>
+//   BenefitsTable.js   //
+
+
+const columnHeaderStyle = {
+  background: 'rgba(0, 181, 173, 1)',
+  color: 'white',
+  fontSize: '1.3em',
+  fontWeight: 900,
+  textAlign: 'center',
+  borderRadius: 'inherit',
+  letterSpacing: '0.02em',
+};
+
+const totalsRowStyle = {
+  borderTop: "2px solid rgba(0, 181, 173, 1)",
+  fontWeight: 700,
+  fontSize: '1.1em',
+  padingTop: '0.25em'
+};
+
+const rowHeaderStyle = {
+  fontSize: '1.1em',
+  fontWeight: 700,
+  textAlign: 'left'
+ };
+
+const totalsRowHeaderStyle = {
+  fontSize: '1.2em',
+  fontWeight: 700,
+  textAlign: 'left',
+  borderTop: "2px solid rgba(0, 181, 173, 1)",
+  padingTop: '0.25em'
+  };
+const basicRow = {
+  textAlign: 'right'
+  };
+
+
+
+const columnHeaderStyle = {
+  background: 'rgba(0, 181, 173, 1)',
+  color: 'white',
+  fontSize: '1.3em',
+  fontWeight: 900,
+  textAlign: 'center',
+  borderRadius: 'inherit',
+  letterSpacing: '0.02em',
+  };
+
+const totalsRowStyle = {
+  borderTop: "2px solid rgba(0, 181, 173, 1)",
+  fontWeight: 700,
+  fontSize: '1.1em',
+  padingTop: '0.25em'
+  };
+
+const rowHeaderStyle = {
+  fontSize: '1.1em',
+  fontWeight: 700,
+  textAlign: 'left'
+  };
+
+const totalsRowHeaderStyle = {
+  fontSize: '1.2em',
+  fontWeight: 700,
+  textAlign: 'left',
+  borderTop: "2px solid rgba(0, 181, 173, 1)",
+  padingTop: '0.25em'
+  };
+
+const basicRow = {
+  textAlign: 'right'
+  };
+
+const tableRow = {
+  border: 'none'
+};
 
 
 
 
 //    currentExpenses.js    //
 
+//form field radio button in utilties 
+const formField = {
+  display: 'inline-block',
+  paddingRight: '1em'
+};
 
-      <Form.Field style={{display: 'inline-block', paddingRight: '1em'}}>
-       <span style={{textDecoration: 'underline'}}>Income</span> 
-      <Form.Field style={{display: 'inline-block', paddingRight: '1em'}}>
+const underline = { //   this should be dropped, emphasis should be bold/strong 
+  textDecoration: 'underline'
+};
 
-
+// uses field-aligner two-column
 
 
 
 //    formHelpers.js  //
 
+const FormSubheading = {
+  display: 'block',
+  textAlign: 'left'
+};
 
+
+const FormHeading = {
+  display: 'inline-block'
+};  
+
+const inlineLabelInfo = {
+  marginLeft: '1em'
+}
+
+const IntervalColumnHeadings = {
+  fontSize: '14px',
+  display: 'inline-block'
+}
+
+
+/*
 33  <Button fluid type='button' color='teal' size='large' className={className} onClick={func}>
 
 89  const flexItemStyle = { flexBasis: '118.3px' };
@@ -259,7 +374,7 @@ const   columnHeaderStyle = {
 70    <Form className = 'income-form flex-item flex-column'>
 77    <Divider className='ui section divider hidden' />
 
-
+*/
 
 //    CLIENT_DEFAULTS.js   //
 //   none   //
@@ -279,7 +394,7 @@ const   columnHeaderStyle = {
 
 //    Result.js  [ResultsGraph?]  //
 
-144    <wrapper className = 'result-page flex-item flex-column'>
+// 144    <wrapper className = 'result-page flex-item flex-column'>
 
 
 
@@ -313,21 +428,21 @@ const   columnHeaderStyle = {
 
 
  // ***WILL***
-AboutContent.js *W
-FixedMenu.js *W
-MainMenu.js *W
-setupTests.js *W
-AboutPage.js *W
-HomePage.js *W
-current-benefits.js *W
-currentIncome.js *W
-Household.js *W
-cashflow.js *W
-getGovData.js *W
-getTimeSetter.js *W
-registerServiceWorker.js *W
-setNestedProperty.js *W
-stylesObjects.js *W
+// AboutContent.js *W
+// FixedMenu.js *W
+// MainMenu.js *W
+// setupTests.js *W
+// AboutPage.js *W
+// HomePage.js *W
+// current-benefits.js *W
+// currentIncome.js *W
+// Household.js *W
+// cashflow.js *W
+// getGovData.js *W
+// getTimeSetter.js *W
+// registerServiceWorker.js *W
+// setNestedProperty.js *W
+// stylesObjects.js *W
 
 
 // AboutPage and AboutContent
