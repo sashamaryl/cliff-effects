@@ -121,7 +121,7 @@ var myTimelineDoubleTime = {
       },
       {
         label: ['Not Eligibile'],
-        data: [0,50], 
+        data: [0,400], 
         backgroundColor: 'rgba(100,180,120,0.5)'
       }]
     },
@@ -154,8 +154,8 @@ var myTimelineDoubleTime = {
         categoryPercentage: 1,
         ticks: 
         {
-          beginAtZero: true
-          // max: 1000
+          beginAtZero: true,
+          min: 0
         },
         stacked: true
       }]
@@ -164,66 +164,86 @@ var myTimelineDoubleTime = {
 };
 
 
-
-// var myBarChart = {
-//   data: {
-//     labels: ['now', 'future'], 
-//     datasets: [
-//       {
-//         label: ['Income'],
-//       data: [fakeClient.current.earned, fakeClient.future.earned], 
-//       backgroundColor: 'rgba(120, 30, 60, 1)'
-//       }
-//     ]
-//   }, 
-//   options: {
-//     responsive: true, 
-//     title: {
-//       display: true, 
-//       text: 'Benefit Eligibility for Household Size'
-//     },
-//     showLines: true, 
-//     stacked: true, 
-//     scales: {
-//       yAxes: {
-//         stacked: true, 
-//         scaleLabel: {
-//           display: true, 
-//           labelString: 'Annual Income ($)'
-//         },
-//         ticks: {
-//           beginAtZero: true
-//         }
-//       }
-//     },
-
-//     tooltips: {
-//           callbacks: {
-//               // format the title of the tooltips to be in USD
-//               title: function(tooltipItems, data) {
-//                   return data.labels[tooltipItems[0].index].toLocaleString("en-US",
-//                       {style:"currency",currency:"USD"}).replace('.00','');
-//               },
-//               /*
-//                * to add number formatting to the tooltips. returns the data label
-//                * + currency format
-//                * from https://github.com/chartjs/Chart.js/issues/2386
-//                */
-//               label: function(tooltipItem, data) {
-//                   return data.datasets[tooltipItem.datasetIndex].label + ": " +
-//                       tooltipItem.yLabel.toLocaleString("en-US",{style:"currency",
-//                           currency:"USD"}).replace('.00','');
-//               }
-//           }
-//       }
-//     }
-//   }; 
-
-
-
-
-  // Non-saving version for first prototype testing
-  
+  var myBarChart = {
+    data: {
+      labels: ['now', 'future'],
+      datasets: [
+        {
+          label: ['Income'],
+          data: [fakeClient.current.earned, fakeClient.future.earned],
+          borderColor: 'maroon',
+          backgroundColor: 'teal'
+        },
+        {
+          label: ["SNAP"], 
+          data: [1300, 1150],
+          borderColor: 'rgba(40,40,40,1)',
+          backgroundColor: 'rgba(40,40,40, 0.5)'
+        },
+        {
+          label: ["Section-8"],
+          data: [2800,1800],
+          borderColor: 'blue',
+          backgroundColor: 'aqua'
+        }
+      ]
+    },
+    options: {
+      responsive: true, 
+      title: {
+        display: true,
+          text: 'Benefit Eligibility for Household Size ' +
+                  props.client.householdSize
+      },
+      showLines: true,
+      stacked: true, 
+      maxBarThickness: 0.8, 
+      categoryPercentage: 0.5, 
+      barPercentage: 0.9, 
+      scales: {
+          yAxes: [{
+            stacked: true, 
+            scaleLabel: {
+              display: true,
+                labelString: 'Annual Income ($)'
+            },
+            ticks: {
+                beginAtZero: true,
+                /*
+                 * function to add $ and 1,000s separators to graph axes
+                 * we are using chart.js v2.7 so it requires a callback function
+                 */
+                callback: function(label) {
+                    return label.toLocaleString("en-US");
+                }
+            }
+          }],
+          xAxes: [{
+            stacked: true
+          }]
+      }
+    },
+        
+    tooltips: {
+          callbacks: {
+              // format the title of the tooltips to be in USD
+              title: function(tooltipItems, data) {
+                  return data.labels[tooltipItems[0].index].toLocaleString("en-US",
+                      {style:"currency",currency:"USD"}).replace('.00','');
+              },
+              /*
+               * to add number formatting to the tooltips. returns the data label
+               * + currency format
+               * from https://github.com/chartjs/Chart.js/issues/2386
+               */
+              label: function(tooltipItem, data) {
+                  return data.datasets[tooltipItem.datasetIndex].label + ": " +
+                      tooltipItem.yLabel.toLocaleString("en-US",{style:"currency",
+                          currency:"USD"}).replace('.00','');
+              }
+          }
+      }
+    }; 
 
   return (
     
@@ -247,7 +267,7 @@ var myTimelineDoubleTime = {
          <Divider padded={'very'} />
          <Divider hidden padded={'very'} />
 
-{/*         <div> <Bar data={myBarChart.data} options={myBarChart.options} compact={true} /> </div>*/}
+        <div> <Bar data={myBarChart.data} options={myBarChart.options} compact={true} /> </div>
 
 
   </FormPartsContainer>
